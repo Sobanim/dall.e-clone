@@ -22,13 +22,26 @@ const Home: FC = () => {
     const [allPost, setAllPosts] = useState(null)
 
     const [searchText, setSearchText] = useState<string>('')
+    const [searchedResults, setSearchedResults] = useState(null)
+    const [searchTimeout, setSearchTimeout] = useState(null)
+
+    const handleSearchChange = (e) => {
+        clearTimeout(searchTimeout)
+        setSearchText(e.target.value)
+        setSearchTimeout(
+        setTimeout(() => {
+            const searchResults = allPost.filter((item) => item.name.toLowerCase().includes(searchText.toLowerCase())) || item.prompt.toLowerCase().includes(searchText.toLowerCase())
+
+            setSearchedResults(searchResults)
+        }, 500))
+    }
 
     useEffect(() => {
         const fetchPosts = async () => {
             setLoading(true)
 
             try {
-                const response = await fetch('https://localhost:3001/api/v1/post', {
+                const response = await fetch('http://localhost:3001/api/v1/post', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json'
@@ -58,7 +71,14 @@ const Home: FC = () => {
             </div>
 
             <div className='mt-16'>
-                <FormField/>
+                <FormField
+                    labelName='Search posts'
+                    type='text'
+                    name='text'
+                    value={searchText}
+                    placeholder='Search posts'
+                    handleChange={handleSearchChange}
+                />
             </div>
 
             <div className='mt-10'>
@@ -76,7 +96,7 @@ const Home: FC = () => {
                         <div className='grid lg:grid-cols-4 sm:grid-cols-3 xs:grid-cols-2 grid-cols-1 gap-3'>
                             {searchText ? (
                                 <RenderCards
-                                    data={[]}
+                                    data={searchedResults}
                                     title='No search results found'
                                 />
                             ) : (

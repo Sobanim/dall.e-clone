@@ -46,7 +46,7 @@ const CreatePost: FC = () => {
         if (form.prompt && form.photo) {
             setLoading(true)
             try {
-                const responce = await fetch('http://localhost:3001/api/v1/post', {
+                const response = await fetch('http://localhost:3001/api/v1/post', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -54,7 +54,7 @@ const CreatePost: FC = () => {
                     body: JSON.stringify(form)
                 })
 
-                await responce.json()
+                await response.json()
                 navigate('/')
             } catch (err) {
                 alert(err)
