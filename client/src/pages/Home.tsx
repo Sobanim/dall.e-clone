@@ -1,4 +1,4 @@
-import {FC, useState} from 'react';
+import {FC, useEffect, useState} from 'react';
 import {Loader, Card, FormField} from '../components';
 
 // interface RenderCardsProps {
@@ -22,6 +22,31 @@ const Home: FC = () => {
     const [allPost, setAllPosts] = useState(null)
 
     const [searchText, setSearchText] = useState<string>('')
+
+    useEffect(() => {
+        const fetchPosts = async () => {
+            setLoading(true)
+
+            try {
+                const response = await fetch('https://localhost:3001/api/v1/post', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                if (response.ok) {
+                    const result = await response.json()
+                    setAllPosts(result.data.reverse())
+                }
+            } catch (err) {
+                alert(err)
+            } finally {
+                setLoading(false)
+            }
+        }
+
+        fetchPosts()
+    }, []);
 
     return (
         <section className='max-w-7xl mx-auto'>
@@ -56,7 +81,7 @@ const Home: FC = () => {
                                 />
                             ) : (
                                 <RenderCards
-                                    data={[]}
+                                    data={allPost}
                                     title='No posts found'
                                 />
                             )}
