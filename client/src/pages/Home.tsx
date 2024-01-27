@@ -23,7 +23,7 @@ const Home: FC = () => {
 
     const [searchText, setSearchText] = useState<string>('')
     const [searchedResults, setSearchedResults] = useState(null)
-    const [searchTimeout, setSearchTimeout] = useState(null)
+    const [searchTimeout, setSearchTimeout] = useState<number>()
 
     const handleSearchChange = (e) => {
         clearTimeout(searchTimeout)

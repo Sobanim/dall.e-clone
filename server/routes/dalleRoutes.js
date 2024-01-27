@@ -11,7 +11,7 @@ const configuration = new Configuration({
     apiKey: process.env.OPENAI_API_KEY,
 })
 
-var openai = new OpenAIApi(configuration)
+const openai = new OpenAIApi(configuration)
 
 router.route('/').get((req, res) => {
     res.send('Hello From DALLE')
